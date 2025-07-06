@@ -1,5 +1,8 @@
-<div class="container">
-  <h1>Hello World!! test Angular Material</h1>
-  <button mat-flat-button>Basic</button>
-  <button mat-flat-button disabled>Disabled</button>
-</div>
+<main class="heroes">
+  <header class="heroes-header">
+    <h1>{{ title }}</h1>
+    <p class="heroes-header-subtitle">Gestiona tu lista de heroes</p>
+  </header>
+
+  <router-outlet></router-outlet>
+</main>
