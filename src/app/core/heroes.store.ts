@@ -2,7 +2,6 @@ import { patchState, signalStore, withMethods, withState, withComputed } from '@
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { tapResponse } from '@ngrx/operators';
 import { computed } from '@angular/core';
-
 import { Hero } from './models/hero.model';
 import { pipe, switchMap } from 'rxjs';
 import { inject } from '@angular/core';
@@ -58,8 +57,9 @@ export const HeroesStore = signalStore(
     addHero: (hero: Hero) => {
       patchState(store, (state) => {
         const newId = Math.max(...state.heroes.map(h => h.id), 0) + 1;
+        const newHero = { ...hero, id: newId };
         return {
-          heroes: [...state.heroes, { ...hero, id: newId }],
+          heroes: [...state.heroes, newHero],
         };
       });
     },
@@ -81,5 +81,10 @@ export const HeroesStore = signalStore(
     setQuery: (query: string) => {
       patchState(store, { query });
     },
+
+    getHeroById: (id: number): Hero | null => {
+      const heroes = store.heroes();
+      return heroes.find(hero => hero.id === id) || null;
+    }
   }))
 );

@@ -11,20 +11,21 @@ import { HeroesStore } from '../../core/heroes.store';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AlertDialogService } from '../../shared/services/alert-dialog.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-hero-list',
   imports: [...MATERIAL_IMPORTS, RiuTableComponent, RiuSearcherComponent],
-  providers: [HeroesStore],
   templateUrl: './hero-list.component.html',
   styleUrl: './hero-list.component.scss',
 })
-export class HeroListComponent implements OnInit {
+export class HeroListComponent {
   dialog = inject(Dialog);
   matDialog = inject(MatDialog);
   snackBar = inject(MatSnackBar);
   alertDialog = inject(AlertDialogService);
   heroesStore = inject(HeroesStore);
+  router = inject(Router);
 
   dataSource = new MatTableDataSource<Hero>([]);
   displayedColumns = ['name', 'power', 'universe', 'level', 'actions'];
@@ -61,10 +62,6 @@ export class HeroListComponent implements OnInit {
     effect(() => {
       this.dataSource.data = this.heroesStore.filteredHeroes();
     });
-  }
-
-  ngOnInit(): void {
-    this.heroesStore.loadHeroes();
   }
 
   searchHero(event: string) {
@@ -137,6 +134,6 @@ export class HeroListComponent implements OnInit {
   }
 
   showHeroDetail(hero: Hero) {
-    console.log('Ver detalle:', hero);
+    this.router.navigate(['/heroes', hero.id]);
   }
 }

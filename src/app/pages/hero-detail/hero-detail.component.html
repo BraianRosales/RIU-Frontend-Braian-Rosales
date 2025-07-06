@@ -1,1 +1,22 @@
-<p>hero-detail works!</p>
+@if (hero(); as heroData) {
+<div>
+  <h2>{{ heroData.name }} - Detalles</h2>
+  <div>
+    <p><strong>ID:</strong> {{ heroData.id }}</p>
+    <p><strong>Nombre:</strong> {{ heroData.name }}</p>
+    <p><strong>Poder:</strong> {{ heroData.power }}</p>
+    <p><strong>Universo:</strong> {{ heroData.universe }}</p>
+    <p><strong>Nivel:</strong> {{ heroData.level }}</p>
+  </div>
+  <button mat-raised-button color="primary" (click)="goBack()">Volver</button>
+</div>
+} @else if (notFound()) {
+<div>
+  <h2>Héroe no encontrado</h2>
+  <button mat-raised-button color="primary" (click)="goBack()">Volver</button>
+</div>
+} @else {
+<div>
+  <h2>Cargando...</h2>
+</div>
+}
