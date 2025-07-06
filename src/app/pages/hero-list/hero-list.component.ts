@@ -3,6 +3,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { RiuTableComponent } from '../../shared/components/riu-table/riu-table.component';
 import { RiuSearcherComponent } from '../../shared/components/riu-searcher/riu-searcher.component';
 import { MATERIAL_IMPORTS } from '../../shared/material-ui.imports';
+import { TableAction } from '../../shared/components/riu-table/riu-table.interfaces';
 
 @Component({
   selector: 'app-hero-list',
@@ -25,6 +26,35 @@ export class HeroListComponent {
   ];
 
   dataSource = new MatTableDataSource(this.heroes);
+  displayedColumns = ['name', 'power', 'universe', 'level', 'actions'];
+  columnTitles = {
+    'name': 'Nombre',
+    'power': 'Poder Principal',
+    'universe': 'Universo',
+    'level': 'Nivel',
+    'actions': 'Acciones'
+  };
+
+  tableActions: TableAction[] = [
+    {
+      name: 'Ver detalle',
+      icon: 'visibility',
+      color: 'accent',
+      action: 'detail'
+    },
+    {
+      name: 'Editar',
+      icon: 'edit',
+      color: 'primary',
+      action: 'edit'
+    },
+    {
+      name: 'Eliminar',
+      icon: 'delete',
+      color: 'warn',
+      action: 'delete'
+    }
+  ];
 
   // TODO: Method to filter the table
   searchHero(event: string) {
@@ -43,6 +73,8 @@ export class HeroListComponent {
       case 'delete':
         this.deleteHero(event.row);
         break;
+      default:
+        console.log('Acción no reconocida:', event.action);
     }
   }
 

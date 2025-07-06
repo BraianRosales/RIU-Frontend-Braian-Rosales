@@ -11,11 +11,19 @@
       color="primary"
       (click)="addHero()"
       class="heroList-controls-addButton"
-      aria-label="Añadir nuevo héroe"
     >
       <mat-icon>add</mat-icon>
       Añadir Héroe
     </button>
   </section>
-  <app-riu-table></app-riu-table>
+  <app-riu-table
+    title="Lista de héroes"
+    [data]="heroes"
+    [dataSource]="dataSource"
+    [displayedColumns]="displayedColumns"
+    [columnTitles]="columnTitles"
+    [actions]="tableActions"
+    (actionClicked)="handleTableAction($event)"
+  >
+  </app-riu-table>
 </main>
