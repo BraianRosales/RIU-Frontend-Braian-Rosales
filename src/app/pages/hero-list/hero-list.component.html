@@ -1,102 +1,21 @@
-<main class="heroesList">
-  <!-- TODO: This part has to be another component -->
-  <section class="heroesList-search">
-    <div class="heroesList-search-container">
-      <mat-form-field appearance="outline" class="heroesList-search-field">
-        <mat-label>Buscar héroes</mat-label>
-        <input
-          matInput
-          [(ngModel)]="searchTerm"
-          (input)="applyFilter($event)"
-          placeholder="Buscar por nombre de héroe..."
-          aria-label="Buscar héroes por nombre"
-        />
-        <mat-icon matSuffix>search</mat-icon>
-      </mat-form-field>
-
-      <button
-        mat-raised-button
-        color="primary"
-        (click)="addHero()"
-        class="heroesList-search-addButton"
-        aria-label="Añadir nuevo héroe"
-      >
-        <mat-icon>add</mat-icon>
-        Añadir Héroe
-      </button>
-    </div>
+<main class="heroList">
+  <section class="heroList-controls">
+    <app-riu-searcher
+      labelText="Buscar héroes"
+      placeholderText="Buscar por nombre de héroe..."
+      buttonText="Añadir Héroe"
+      (searchChanged)="searchHero($event)"
+    ></app-riu-searcher>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="addHero()"
+      class="heroList-controls-addButton"
+      aria-label="Añadir nuevo héroe"
+    >
+      <mat-icon>add</mat-icon>
+      Añadir Héroe
+    </button>
   </section>
-
-  <!-- TODO: This part has to be another component -->
-  <section class="heroesList-table">
-    <h2 id="heroesList-table-title">Lista de héroes</h2>
-
-    <div class="heroesList-table-container">
-      <table mat-table [dataSource]="dataSource">
-        <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef>Nombre</th>
-          <td mat-cell *matCellDef="let hero">{{ hero.name }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="power">
-          <th mat-header-cell *matHeaderCellDef>Poder Principal</th>
-          <td mat-cell *matCellDef="let hero">{{ hero.power }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="universe">
-          <th mat-header-cell *matHeaderCellDef>Universo</th>
-          <td mat-cell *matCellDef="let hero">{{ hero.universe }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="level">
-          <th mat-header-cell *matHeaderCellDef>Nivel</th>
-          <td mat-cell *matCellDef="let hero">{{ hero.level }}</td>
-        </ng-container>
-
-        <!-- Actions column -->
-        <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef>Acciones</th>
-          <td mat-cell *matCellDef="let hero">
-            <div class="heroesList-table-actionButtons">
-              <button mat-icon-button (click)="seeDetail(hero)" title="Detalle">
-                <mat-icon color="accent">visibility</mat-icon>
-              </button>
-              <button mat-icon-button (click)="editHero(hero)" title="Editar">
-                <mat-icon color="primary">edit</mat-icon>
-              </button>
-              <button
-                mat-icon-button
-                (click)="deleteHero(hero)"
-                title="Eliminar"
-              >
-                <mat-icon color="warn">delete</mat-icon>
-              </button>
-            </div>
-          </td>
-        </ng-container>
-
-        <!-- Table rows -->
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-
-        <!-- Row for when there is no data -->
-        <tr class="mat-row" *matNoDataRow>
-          <td class="mat-cell" colspan="6">
-            <div class="heroesList-table-noDataMessage">
-              <mat-icon>search_off</mat-icon>
-              <p>No se encontraron héroes que coincidan con tu búsqueda</p>
-            </div>
-          </td>
-        </tr>
-      </table>
-
-      <mat-paginator
-        [pageSizeOptions]="[5, 10, 20]"
-        showFirstLastButtons
-        aria-label="Seleccionar página de héroes"
-        class="heroesList-table-paginator"
-      >
-      </mat-paginator>
-    </div>
-  </section>
+  <app-riu-table></app-riu-table>
 </main>

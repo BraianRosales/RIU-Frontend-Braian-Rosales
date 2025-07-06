@@ -1,16 +1,18 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { RiuTableComponent } from '../../shared/components/riu-table/riu-table.component';
-import { RiuSearcherComponent } from '../../shared/components/riu-searcher/riu-searcher.component';
-import { MATERIAL_IMPORTS } from '../../shared/material-ui.imports';
+import { MATERIAL_IMPORTS, MATERIAL_PROVIDERS } from '../../material-ui.imports';
 
 @Component({
-  selector: 'app-hero-list',
-  imports: [...MATERIAL_IMPORTS, RiuTableComponent, RiuSearcherComponent],
-  templateUrl: './hero-list.component.html',
-  styleUrl: './hero-list.component.scss'
+  selector: 'app-riu-table',
+  imports: [...MATERIAL_IMPORTS],
+  providers: [...MATERIAL_PROVIDERS],
+  templateUrl: './riu-table.component.html',
+  styleUrl: './riu-table.component.scss'
 })
-export class HeroListComponent {
+export class RiuTableComponent implements OnInit, AfterViewInit {
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
   heroes = [
     { id: 1, name: 'Superman', power: 'Super Fuerza', universe: 'DC', level: 95 },
     { id: 2, name: 'Spider-Man', power: 'Sentido Arácnido', universe: 'Marvel', level: 85 },
@@ -24,31 +26,15 @@ export class HeroListComponent {
     { id: 10, name: 'Black Panther', power: 'Agilidad y fuerza', universe: 'Marvel', level: 83 },
   ];
 
+  displayedColumns: string[] = ['name', 'power', 'universe', 'level', 'actions'];
   dataSource = new MatTableDataSource(this.heroes);
 
-  // TODO: Method to filter the table
-  searchHero(event: string) {
-    const filterValue = event;
-    console.log("Buscar por:", filterValue.trim().toLowerCase())
+  ngOnInit() {
+    this.dataSource.paginator = this.paginator;
   }
 
-  handleTableAction(event: { action: string; row: any }) {
-    switch (event.action) {
-      case 'detail':
-        this.showHeroDetail(event.row);
-        break;
-      case 'edit':
-        this.editHero(event.row);
-        break;
-      case 'delete':
-        this.deleteHero(event.row);
-        break;
-    }
-  }
-
-  addHero() {
-    console.log('Añadir héroe');
-    // TODO: logic for add a hero
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
   }
 
   editHero(hero: any) {
@@ -61,7 +47,7 @@ export class HeroListComponent {
     // TODO: logic for delete a hero
   }
 
-  showHeroDetail(hero: any) {
+  seeDetail(hero: any) {
     console.log('Ver detalle:', hero)
     // TODO: logic for see detail
   }

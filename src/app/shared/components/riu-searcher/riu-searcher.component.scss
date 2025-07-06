@@ -1,0 +1,17 @@
+:host {
+    width: 85%;
+}
+
+.riuSearcher {
+    &-container {
+        display: flex;
+        gap: 20px;
+        justify-content: space-between;
+        flex-wrap: wrap;
+
+        &-field {
+            flex: 1;
+            min-width: 300px;
+        }
+    }
+}
