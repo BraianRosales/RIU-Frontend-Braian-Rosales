@@ -19,11 +19,11 @@ export class RiuSearcherComponent {
     this.searchControl.valueChanges
       .pipe(
         debounceTime(500),                  
-        distinctUntilChanged(),             
-        filter(value => (value?.length ?? 0) > 2)
+        distinctUntilChanged()
       )
       .subscribe(value => {
-        this.searchChanged.emit(value ?? '');
+        const searchValue = value ?? '';
+        this.searchChanged.emit(searchValue);
       });
   }
 }

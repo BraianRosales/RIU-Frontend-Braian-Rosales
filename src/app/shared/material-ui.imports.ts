@@ -9,6 +9,7 @@ import { getCustomPaginatorIntl } from './custom-paginator-intl';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSliderModule } from '@angular/material/slider';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 export const MATERIAL_IMPORTS = [
   MatButtonModule,
@@ -21,6 +22,7 @@ export const MATERIAL_IMPORTS = [
   MatDialogModule,
   MatSelectModule,
   MatSliderModule,
+  MatSnackBarModule,
 ];
 
 export const MATERIAL_PROVIDERS = [

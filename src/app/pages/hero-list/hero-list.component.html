@@ -18,7 +18,7 @@
   </section>
   <app-riu-table
     title="Lista de héroes"
-    [data]="heroes"
+    [data]="heroesStore.filteredHeroes()"
     [dataSource]="dataSource"
     [displayedColumns]="displayedColumns"
     [columnTitles]="columnTitles"

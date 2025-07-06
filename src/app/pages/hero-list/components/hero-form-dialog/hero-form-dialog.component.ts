@@ -63,12 +63,10 @@ export class HeroFormDialogComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  // Generate temporary ID for new heroes.
   private generateId(): number {
     return Math.floor(Math.random() * 10000) + 1000;
   }
 
-  // Mark all fields as touched to show errors.
   private markFormGroupTouched() {
     Object.keys(this.heroForm.controls).forEach(key => {
       const control = this.heroForm.get(key);
