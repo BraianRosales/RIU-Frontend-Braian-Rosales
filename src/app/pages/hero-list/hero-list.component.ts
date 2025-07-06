@@ -1,9 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { RiuTableComponent } from '../../shared/components/riu-table/riu-table.component';
 import { RiuSearcherComponent } from '../../shared/components/riu-searcher/riu-searcher.component';
 import { MATERIAL_IMPORTS } from '../../shared/material-ui.imports';
 import { TableAction } from '../../shared/components/riu-table/riu-table.interfaces';
+import { Dialog } from '@angular/cdk/dialog';
+import { HeroFormDialogComponent } from './components/hero-form-dialog/hero-form-dialog.component';
+import { Hero } from '../../core/models/hero.model';
 
 @Component({
   selector: 'app-hero-list',
@@ -12,7 +15,9 @@ import { TableAction } from '../../shared/components/riu-table/riu-table.interfa
   styleUrl: './hero-list.component.scss'
 })
 export class HeroListComponent {
-  heroes = [
+  private dialog = inject(Dialog);
+
+  heroes: Hero[] = [
     { id: 1, name: 'Superman', power: 'Super Fuerza', universe: 'DC', level: 95 },
     { id: 2, name: 'Spider-Man', power: 'Sentido Arácnido', universe: 'Marvel', level: 85 },
     { id: 3, name: 'Batman', power: 'Inteligencia', universe: 'DC', level: 90 },
@@ -25,7 +30,7 @@ export class HeroListComponent {
     { id: 10, name: 'Black Panther', power: 'Agilidad y fuerza', universe: 'Marvel', level: 83 },
   ];
 
-  dataSource = new MatTableDataSource(this.heroes);
+  dataSource = new MatTableDataSource<Hero>(this.heroes);
   displayedColumns = ['name', 'power', 'universe', 'level', 'actions'];
   columnTitles = {
     'name': 'Nombre',
@@ -56,7 +61,6 @@ export class HeroListComponent {
     }
   ];
 
-  // TODO: Method to filter the table
   searchHero(event: string) {
     const filterValue = event;
     console.log("Buscar por:", filterValue.trim().toLowerCase())
@@ -80,21 +84,49 @@ export class HeroListComponent {
 
   addHero() {
     console.log('Añadir héroe');
-    // TODO: logic for add a hero
+    
+    const dialogRef = this.dialog.open<Hero>(HeroFormDialogComponent, {
+      width: '500px',
+      data: {}
+    });
+
+    dialogRef.closed.subscribe((result: Hero | undefined) => {
+      if (result) {
+        console.log('Nuevo héroe creado:', result);
+        this.heroes.push(result);
+        this.dataSource.data = [...this.heroes];
+      }
+    });
   }
 
-  editHero(hero: any) {
+  editHero(hero: Hero) {
     console.log('Editar héroe:', hero);
-    // TODO: logic for edit a hero
+    const dialogRef = this.dialog.open<Hero>(HeroFormDialogComponent, {
+      width: '500px',
+      data: { hero: hero }
+    });
+
+    dialogRef.closed.subscribe((result: Hero | undefined) => {
+      if (result) {
+        const index = this.heroes.findIndex(h => h.id === hero.id);
+        if (index !== -1) {
+          this.heroes[index] = result;
+          this.dataSource.data = [...this.heroes];
+        }
+      }
+    });
   }
 
-  deleteHero(hero: any) {
+  deleteHero(hero: Hero) {
     console.log('Eliminar héroe:', hero);
-    // TODO: logic for delete a hero
+    const index = this.heroes.findIndex(h => h.id === hero.id);
+    if (index !== -1) {
+      this.heroes.splice(index, 1);
+      this.dataSource.data = [...this.heroes];
+    }
   }
 
-  showHeroDetail(hero: any) {
+  showHeroDetail(hero: Hero) {
     console.log('Ver detalle:', hero)
-    // TODO: logic for see detail
   }
 }

@@ -6,7 +6,9 @@ import { MatPaginatorModule, MatPaginatorIntl } from '@angular/material/paginato
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { getCustomPaginatorIntl } from './custom-paginator-intl';
-
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSliderModule } from '@angular/material/slider';
 
 export const MATERIAL_IMPORTS = [
   MatButtonModule,
@@ -15,7 +17,10 @@ export const MATERIAL_IMPORTS = [
   MatTableModule,
   MatPaginatorModule,
   MatInputModule,
-  MatFormFieldModule
+  MatFormFieldModule,
+  MatDialogModule,
+  MatSelectModule,
+  MatSliderModule,
 ];
 
 export const MATERIAL_PROVIDERS = [
