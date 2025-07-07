@@ -46,3 +46,19 @@ Elegí NGRX Signals para este proyecto RIU porque es la nueva forma recomendada 
    - ng test --watch --code-coverage
    - Esto ejecutará los tests y mostrará el reporte de cobertura en tiempo real.
    - Para poder ver el Coverage 100% entras en la carpeta de mi proyecto (RIU-Frontend-Braian-Rosales), luego ingresas en la carpeta "coverage", despues ingresas en la carpeta "riu-frontend-braian-rosales" y haces doble click en el archivo "index".
+
+## Despliegue con Docker
+
+> **Requisito:**
+> Asegurate de tener [Docker Desktop](https://www.docker.com/products/docker-desktop/) instalado y en ejecución antes de continuar.
+
+### Pasos para correr la app con Docker
+
+1. Construí la imagen:
+   - docker build -t riu-frontend .
+
+2. Levantá el contenedor:
+   - docker run -p 8080:80 riu-frontend
+
+3. Abrí tu navegador en:
+   - http://localhost:8080
