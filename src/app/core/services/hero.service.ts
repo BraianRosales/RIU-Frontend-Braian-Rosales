@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Hero } from '../models/hero.model';
-import { Observable, of } from 'rxjs';
+import { Observable, of, delay } from 'rxjs';
 
 const heroes: Hero[] = [
   { id: 1, name: 'Superman', power: 'Super Fuerza', universe: 'DC', level: 95 },
@@ -82,19 +82,22 @@ export class HeroService {
   createHero(hero: Omit<Hero, 'id'>, heroes: Hero[]): Observable<Hero> {
     const newId = Math.max(...heroes.map((h) => h.id), 0) + 1;
     const newHero: Hero = { ...hero, id: newId };
-    return of(newHero);
+    return of(newHero).pipe(delay(1000));
   }
 
   updateHero(updatedHero: Hero, heroes: Hero[]): Observable<Hero | null> {
     const index = heroes.findIndex((h) => h.id === updatedHero.id);
     if (index !== -1) {
-      return of(updatedHero);
+      return of(updatedHero).pipe(delay(1000));
     }
     return of(null);
   }
 
   deleteHero(id: number, heroes: Hero[]): Observable<boolean> {
     const index = heroes.findIndex((h) => h.id === id);
-    return of(index !== -1);
+    if (index !== -1) {
+      return of(true).pipe(delay(1000));
+    }
+    return of(false);
   }
 }

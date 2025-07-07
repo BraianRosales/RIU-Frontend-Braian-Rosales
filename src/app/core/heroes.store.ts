@@ -1,9 +1,15 @@
-import { patchState, signalStore, withMethods, withState, withComputed } from '@ngrx/signals';
+import {
+  patchState,
+  signalStore,
+  withMethods,
+  withState,
+  withComputed,
+} from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { tapResponse } from '@ngrx/operators';
 import { computed } from '@angular/core';
 import { Hero } from './models/hero.model';
-import { pipe, switchMap } from 'rxjs';
+import { pipe, switchMap, tap } from 'rxjs';
 import { inject } from '@angular/core';
 import { HeroService } from './services/hero.service';
 
@@ -23,18 +29,18 @@ const initialState: HeroesState = {
 
 export const HeroesStore = signalStore(
   withState(initialState),
-  
+
   withComputed((state) => ({
     filteredHeroes: computed(() => {
       const heroes = state.heroes();
       const query = state.query();
-      
+
       if (!query || query.trim() === '') {
         return heroes;
       }
-      
+
       const searchTerm = query.toLowerCase().trim();
-      return heroes.filter(hero => 
+      return heroes.filter((hero) =>
         hero.name.toLowerCase().includes(searchTerm)
       );
     }),
@@ -58,6 +64,9 @@ export const HeroesStore = signalStore(
 
     addHero: rxMethod<Omit<Hero, 'id'>>(
       pipe(
+        tap(() => {
+          patchState(store, { isLoading: true });
+        }),
         switchMap((hero) =>
           heroService.createHero(hero, store.heroes()).pipe(
             tapResponse({
@@ -65,8 +74,11 @@ export const HeroesStore = signalStore(
                 patchState(store, (state) => ({
                   heroes: [...state.heroes, newHero],
                 }));
+                patchState(store, { isLoading: false });
               },
-              error: () => {},
+              error: () => {
+                patchState(store, { isLoading: false });
+              },
             })
           )
         )
@@ -75,6 +87,9 @@ export const HeroesStore = signalStore(
 
     deleteHero: rxMethod<number>(
       pipe(
+        tap(() => {
+          patchState(store, { isLoading: true });
+        }),
         switchMap((id) =>
           heroService.deleteHero(id, store.heroes()).pipe(
             tapResponse({
@@ -84,8 +99,11 @@ export const HeroesStore = signalStore(
                     heroes: state.heroes.filter((h) => h.id !== id),
                   }));
                 }
+                patchState(store, { isLoading: false });
               },
-              error: () => {},
+              error: () => {
+                patchState(store, { isLoading: false });
+              },
             })
           )
         )
@@ -94,19 +112,25 @@ export const HeroesStore = signalStore(
 
     updateHero: rxMethod<Hero>(
       pipe(
+        tap(() => {
+          patchState(store, { isLoading: true });
+        }),
         switchMap((updatedHero) =>
           heroService.updateHero(updatedHero, store.heroes()).pipe(
             tapResponse({
               next: (hero: Hero | null) => {
                 if (hero) {
                   patchState(store, (state) => ({
-                    heroes: state.heroes.map((h) => 
+                    heroes: state.heroes.map((h) =>
                       h.id === updatedHero.id ? updatedHero : h
                     ),
                   }));
                 }
+                patchState(store, { isLoading: false });
               },
-              error: () => {},
+              error: () => {
+                patchState(store, { isLoading: false });
+              },
             })
           )
         )
@@ -151,6 +175,6 @@ export const HeroesStore = signalStore(
 
     clearSelectedHero: () => {
       patchState(store, { selectedHero: null });
-    }
+    },
   }))
 );
