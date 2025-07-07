@@ -11,12 +11,14 @@ type HeroesState = {
   heroes: Hero[];
   query: string;
   isLoading: boolean;
+  selectedHero: Hero | null;
 };
 
 const initialState: HeroesState = {
   heroes: [],
   query: '',
   isLoading: false,
+  selectedHero: null,
 };
 
 export const HeroesStore = signalStore(
@@ -54,37 +56,101 @@ export const HeroesStore = signalStore(
       )
     ),
 
-    addHero: (hero: Hero) => {
-      patchState(store, (state) => {
-        const newId = Math.max(...state.heroes.map(h => h.id), 0) + 1;
-        const newHero = { ...hero, id: newId };
-        return {
-          heroes: [...state.heroes, newHero],
-        };
-      });
-    },
+    addHero: rxMethod<Omit<Hero, 'id'>>(
+      pipe(
+        switchMap((hero) =>
+          heroService.createHero(hero, store.heroes()).pipe(
+            tapResponse({
+              next: (newHero: Hero) => {
+                patchState(store, (state) => ({
+                  heroes: [...state.heroes, newHero],
+                }));
+              },
+              error: () => {},
+            })
+          )
+        )
+      )
+    ),
 
-    deleteHero: (hero: Hero) => {
-      patchState(store, (state) => ({
-        heroes: state.heroes.filter((h) => h.id !== hero.id),
-      }));
-    },
+    deleteHero: rxMethod<number>(
+      pipe(
+        switchMap((id) =>
+          heroService.deleteHero(id, store.heroes()).pipe(
+            tapResponse({
+              next: (success: boolean) => {
+                if (success) {
+                  patchState(store, (state) => ({
+                    heroes: state.heroes.filter((h) => h.id !== id),
+                  }));
+                }
+              },
+              error: () => {},
+            })
+          )
+        )
+      )
+    ),
 
-    updateHero: (updatedHero: Hero) => {
-      patchState(store, (state) => ({
-        heroes: state.heroes.map((hero) => 
-          hero.id === updatedHero.id ? updatedHero : hero
-        ),
-      }));
-    },
+    updateHero: rxMethod<Hero>(
+      pipe(
+        switchMap((updatedHero) =>
+          heroService.updateHero(updatedHero, store.heroes()).pipe(
+            tapResponse({
+              next: (hero: Hero | null) => {
+                if (hero) {
+                  patchState(store, (state) => ({
+                    heroes: state.heroes.map((h) => 
+                      h.id === updatedHero.id ? updatedHero : h
+                    ),
+                  }));
+                }
+              },
+              error: () => {},
+            })
+          )
+        )
+      )
+    ),
+
+    searchHeroesByName: rxMethod<string>(
+      pipe(
+        switchMap((searchTerm) =>
+          heroService.searchHeroesByName(searchTerm, store.heroes()).pipe(
+            tapResponse({
+              next: (heroes: Hero[]) => {
+                patchState(store, { heroes });
+              },
+              error: () => {},
+            })
+          )
+        )
+      )
+    ),
+
+    getHeroById: rxMethod<number>(
+      pipe(
+        switchMap((id) =>
+          heroService.getHeroById(id, store.heroes()).pipe(
+            tapResponse({
+              next: (hero: Hero | null) => {
+                patchState(store, { selectedHero: hero });
+              },
+              error: () => {
+                patchState(store, { selectedHero: null });
+              },
+            })
+          )
+        )
+      )
+    ),
 
     setQuery: (query: string) => {
       patchState(store, { query });
     },
 
-    getHeroById: (id: number): Hero | null => {
-      const heroes = store.heroes();
-      return heroes.find(hero => hero.id === id) || null;
+    clearSelectedHero: () => {
+      patchState(store, { selectedHero: null });
     }
   }))
 );

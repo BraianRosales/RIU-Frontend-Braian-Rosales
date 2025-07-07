@@ -61,7 +61,40 @@ const heroes: Hero[] = [
   providedIn: 'root',
 })
 export class HeroService {
+  private heroesData: Hero[] = [...heroes];
+
   getHeroes(): Observable<Hero[]> {
-    return of(heroes);
+    return of(this.heroesData);
+  }
+
+  getHeroById(id: number, heroes: Hero[]): Observable<Hero | null> {
+    const hero = heroes.find((h) => h.id === id);
+    return of(hero || null);
+  }
+
+  searchHeroesByName(searchTerm: string, heroes: Hero[]): Observable<Hero[]> {
+    const filteredHeroes = heroes.filter((hero) =>
+      hero.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    return of(filteredHeroes);
+  }
+
+  createHero(hero: Omit<Hero, 'id'>, heroes: Hero[]): Observable<Hero> {
+    const newId = Math.max(...heroes.map((h) => h.id), 0) + 1;
+    const newHero: Hero = { ...hero, id: newId };
+    return of(newHero);
+  }
+
+  updateHero(updatedHero: Hero, heroes: Hero[]): Observable<Hero | null> {
+    const index = heroes.findIndex((h) => h.id === updatedHero.id);
+    if (index !== -1) {
+      return of(updatedHero);
+    }
+    return of(null);
+  }
+
+  deleteHero(id: number, heroes: Hero[]): Observable<boolean> {
+    const index = heroes.findIndex((h) => h.id === id);
+    return of(index !== -1);
   }
 }

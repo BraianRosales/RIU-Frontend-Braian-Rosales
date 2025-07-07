@@ -12,7 +12,9 @@ import { debounceTime, distinctUntilChanged, filter } from 'rxjs';
 export class RiuSearcherComponent {
   readonly labelText = input<string>('Buscar');
   readonly placeholderText = input<string>('Buscar por nombre...');
-  readonly searchChanged = output<string>();  
+  readonly buttonText = input<string>('');
+  readonly searchChanged = output<string>();
+  
   searchControl = new FormControl('');
   
   ngOnInit(): void {

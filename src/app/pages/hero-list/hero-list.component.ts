@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, effect } from '@angular/core';
+import { Component, inject, effect } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { RiuTableComponent } from '../../shared/components/riu-table/riu-table.component';
 import { RiuSearcherComponent } from '../../shared/components/riu-searcher/riu-searcher.component';
@@ -80,57 +80,85 @@ export class HeroListComponent {
         this.deleteHero(event.row);
         break;
       default:
-        console.warn('Acción no reconocida:', event.action);
+        this.snackBar.open(`Acción no reconocida`, 'Cerrar', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+        });
     }
   }
 
   addHero() {
-    const dialogRef = this.dialog.open<Hero>(HeroFormDialogComponent, {
-      width: '500px',
-      data: {},
-    });
-
-    dialogRef.closed.subscribe((result: Hero | undefined) => {
-      if (result) {
-        this.heroesStore.addHero(result);
-        this.snackBar.open(`${result.name} fue agregado`, 'Cerrar', {
-          duration: 3000,
-          horizontalPosition: 'center',
-          verticalPosition: 'bottom',
-        });
+    const dialogRef = this.dialog.open<Hero | Omit<Hero, 'id'>>(
+      HeroFormDialogComponent,
+      {
+        width: '500px',
+        data: {},
       }
-    });
+    );
+
+    dialogRef.closed.subscribe(
+      (result: Hero | Omit<Hero, 'id'> | undefined) => {
+        if (result && 'id' in result) {
+          this.snackBar.open(`No se pudo agregar el héroe`, 'Cerrar', {
+            duration: 3000,
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom',
+          });
+        } else if (result) {
+          this.heroesStore.addHero(result);
+          this.snackBar.open(`${result.name} fue agregado`, 'Cerrar', {
+            duration: 3000,
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom',
+          });
+        }
+      }
+    );
   }
 
   editHero(hero: Hero) {
-    const dialogRef = this.dialog.open<Hero>(HeroFormDialogComponent, {
-      width: '500px',
-      data: { hero: hero },
-    });
-
-    dialogRef.closed.subscribe((result: Hero | undefined) => {
-      if (result) {
-        this.heroesStore.updateHero(result);
-        this.snackBar.open(`${result.name} fue actualizado`, 'Cerrar', {
-          duration: 3000,
-          horizontalPosition: 'center',
-          verticalPosition: 'bottom',
-        });
+    const dialogRef = this.dialog.open<Hero | Omit<Hero, 'id'>>(
+      HeroFormDialogComponent,
+      {
+        width: '500px',
+        data: { hero: hero },
       }
-    });
+    );
+
+    dialogRef.closed.subscribe(
+      (result: Hero | Omit<Hero, 'id'> | undefined) => {
+        if (result && 'id' in result) {
+          this.heroesStore.updateHero(result);
+          this.snackBar.open(`${result.name} fue actualizado`, 'Cerrar', {
+            duration: 3000,
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom',
+          });
+        } else {
+          this.snackBar.open(`No se pudo actualizar el héroe`, 'Cerrar', {
+            duration: 3000,
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom',
+          });
+        }
+      }
+    );
   }
 
   deleteHero(hero: Hero) {
-    this.alertDialog.confirmDelete(hero.name).subscribe((confirmed: boolean) => {
-      if (confirmed) {
-        this.heroesStore.deleteHero(hero);
-        this.snackBar.open(`${hero.name} fue eliminado`, 'Cerrar', {
-          duration: 3000,
-          horizontalPosition: 'center',
-          verticalPosition: 'bottom',
-        });
-      }
-    });
+    this.alertDialog
+      .confirmDelete(hero.name)
+      .subscribe((confirmed: boolean) => {
+        if (confirmed) {
+          this.heroesStore.deleteHero(hero.id);
+          this.snackBar.open(`${hero.name} fue eliminado`, 'Cerrar', {
+            duration: 3000,
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom',
+          });
+        }
+      });
   }
 
   showHeroDetail(hero: Hero) {
