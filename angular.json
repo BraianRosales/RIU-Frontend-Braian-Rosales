@@ -95,7 +95,16 @@
               "@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "codeCoverage": true,
+            "codeCoverageExclude": [
+              "src/main.ts",
+              "src/app/app.config.ts",
+              "src/app/app.routes.ts",
+              "**/*.spec.ts",
+              "**/*.module.ts",
+              "**/index.ts"
+            ]
           }
         }
       }
