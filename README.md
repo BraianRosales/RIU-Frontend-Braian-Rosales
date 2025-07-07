@@ -1,59 +1,48 @@
-# RiuFrontendBraianRosales
+# RIU Frontend - Braian Rosales
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.15.
+## Introducción
 
-## Development server
+Este proyecto es una aplicación web para la gestión de super héroes, desarrollada como parte del challenge técnico RIU. Permite listar, buscar, agregar, editar y eliminar héroes, mostrando la información de manera clara. La interfaz está construida con Angular y utiliza Angular Material para una experiencia visual moderna.
 
-To start a local development server, run:
+Para destacar, utilicé **NGRX Signals** como manejador de estado global de la aplicación, que es la nueva forma recomendada de manejar el estado en Angular.
 
-```bash
-ng serve
-```
+## ¿Por que NGRX Signals?
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Elegí NGRX Signals para este proyecto RIU porque es la nueva forma recomendada de manejar el estado global en Angular, permitiendo una gestión reactiva, simple y eficiente. Signals facilita que todos los componentes estén siempre actualizados ante cualquier cambio en el estado, sin necesidad de lógica compleja ni suscripciones manuales. Esto mejora la experiencia de usuario y la mantenibilidad del código, como tambien que sea escalable.
 
-## Code scaffolding
+### Pantalla principal de la aplicación
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+![Pantalla principal de la aplicación mostrando la lista de héroes](/assets/RIU-Heroes.png)
 
-```bash
-ng generate component component-name
-```
+## Tecnologías utilizadas
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+- Angular 19: Framework principal para el desarrollo de la **aplicación**.
+- Angular Material version 19: Componentes UI modernos y reutilizables.
+- NGRX Signals: Manejo de estado reactivo y global para manejar el estado de los Héroes.
+- RxJS: Programación reactiva para el manejo de datos asíncronos.
+- TypeScript: Tipado estático para mayor robustez y mantenibilidad.
+- Karma + Jasmine: Herramientas para testing unitario y Coverage del código.
+- SCSS: Preprocesador CSS para estilos más organizados y reutilizables.
 
-```bash
-ng generate --help
-```
+## Instalación
 
-## Building
+1. **Clonar el repositorio**
+   - En la terminal y la raíz donde queres alojar el proyecto hacer:
+  
+   - git clone https://github.com/BraianRosales/RIU-Frontend-Braian-Rosales.git
 
-To build the project run:
+   - cd RIU-Frontend-Braian-Rosales
 
-```bash
-ng build
-```
+2. **Instala las dependencias**
+   - npm install
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+3. **Levanta el servidor de desarrollo**
+   - npm run start
+  
+   - Luego abre tu navegador en [http://localhost:4200](http://localhost:4200)
 
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+4. **Ejecuta los tests con coverage y watch**
+   
+   - ng test --watch --code-coverage
+   - Esto ejecutará los tests y mostrará el reporte de cobertura en tiempo real.
+   - Para poder ver el Coverage 100% entras en la carpeta de mi proyecto (RIU-Frontend-Braian-Rosales), luego ingresas en la carpeta "coverage", despues ingresas en la carpeta "riu-frontend-braian-rosales" y haces doble click en el archivo "index".
