@@ -9,11 +9,12 @@ import {
 import { CommonModule } from '@angular/common';
 import { Hero } from '../../../../core/models/hero.model';
 import { MATERIAL_IMPORTS } from '../../../../shared/material-ui.imports';
+import { UppercaseDirective } from '../../../../shared/directives/upper-case.directive';
 
 type HeroFormResult = Hero | Omit<Hero, 'id'>;
 @Component({
   selector: 'app-hero-form-dialog',
-  imports: [CommonModule, ReactiveFormsModule, ...MATERIAL_IMPORTS],
+  imports: [CommonModule, ReactiveFormsModule, ...MATERIAL_IMPORTS, UppercaseDirective],
   templateUrl: './hero-form-dialog.component.html',
   styleUrl: './hero-form-dialog.component.scss',
 })
